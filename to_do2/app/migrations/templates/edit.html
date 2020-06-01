@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %} 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'to_do2.css' %}"> 
+    <title>Document</title>
+</head>
+<body>
+    {% block content %}
+    <form method="POST">
+    {% csrf_token %}
+        <div class="header">
+            <textarea class="titlebox" type="text" name="title" placeholder="제목을 입력하세요">{{post.title}}</textarea>
+            <textarea class="textbox" type="text" name="content" placeholder="내용을 입력하세요">{{post.content}}</textarea>
+        </div>
+        
+        <div class="content">
+            <div>마감기한 : </div>
+            <input type="text" name="due" value="{{post.due.year}}-{{post.due.month}}-{{post.due.day}} {{post.due.hour}}:00">
+        </div>
+
+        <div class="footer">
+            <button type="submit">작성하기</button>
+        </div>
+    </form>
+    {% endblock content %}
+</body>
+</html>

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'to_do2.css' %}">
+    <title>Document</title>
+</head>
+<body>
+    {% block content %}
+    <div class="header">
+        <div>{{post.title}}</div>
+        <div>{{post.content}}</div>
+    </div>
+
+    <div class="content">
+        <div>마감기한 : {{post.due_dute}} </div>
+        <div>{{post.due|timeuntil}} 남음</div>
+    </div>
+
+    <div class="footer">
+        <div><a href="{% url 'index' %}">홈으로</a></div>
+        {% if user.is_authenticated and post.author.pk == user.pk %}
+        <div><a href="{% url 'edit' post.pk %}">수정하기</a></div>
+        <div><a href="{% url 'delete' post.pk %}">삭제하기</a></div>
+        {% endif %}
+    </div>
+
+    <div>
+        {% if user.is_authenticated %}
+        <div>댓글쓰기</div>
+        <form method="POST">
+        {% csrf_token %}
+        <textarea type="text" name="content" placeholder="내용을 입력하세요">{{comment.content}}</textarea>
+        <div><button type="submit">등록</button></div>
+        </form>
+        {% endif %}
+    </div>
+
+    {% for comment in post.comments.all %}
+    <div class="comment_delete">
+        <div class="comment">
+            {{comment.content}}
+            {% if user.is_authenticated and comment.author.pk == user.pk %}
+            <a href="{% url 'delete_comment' post.pk comment.pk %}">댓글 삭제</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+    {% endblock content %}
+</body>
+</html>

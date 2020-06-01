@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'to_do2.css' %}">
+    <title>Document</title>
+</head>
+
+<body>
+    {% block content %}
+    <div>{{user.username}}님이 작성하신 글</div>
+    {% for post in posts %}
+        {% if user.is_authenticated and post.author.pk == user.pk %}
+            <div class="header">
+                <div>{{post.title}}</div>
+                <div>{{post.content}}</div>
+            </div>
+
+            <div class="content">
+                <div>마감기한 : {{post.due}} </div>
+                <div>{{post.due|timeuntil}} 남음</div>
+            </div>
+
+            <div class="footer">
+                <div><a href="{% url 'editname' post.pk %}">수정하기</a></div>
+                <div><a href="{% url 'deletename' post.pk %}">삭제하기</a></div>
+            </div>
+        {% endif %} 
+    {% endfor %}
+    {% endblock content %}
+</body>
+</html>
